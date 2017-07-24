@@ -13,6 +13,7 @@ import XMonad.Util.Run(spawnPipe)
 import System.IO (hPutStrLn)
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Actions.CycleWS
+import Graphics.X11.ExtraTypes.XF86
 
 
 xmobarTitleColor :: String
@@ -40,6 +41,12 @@ myKeys :: [((KeyMask, KeySym), X ())]
 myKeys = [ ((altMask .|. controlMask, xK_l), spawn "slock")
          , ((altMask .|. controlMask, xK_Left  ), prevWS)
          , ((altMask .|. controlMask, xK_Right ), nextWS)
+         , ((0, xF86XK_KbdBrightnessUp), spawn "asus-kbd-backlight up")
+         , ((0, xF86XK_KbdBrightnessDown), spawn "asus-kbd-backlight down")
+         , ((0, xF86XK_AudioRaiseVolume), spawn "amixer -q set Master 4%+")
+         , ((0, xF86XK_AudioLowerVolume), spawn "amixer -q set Master 4%-")
+         , ((0, xF86XK_MonBrightnessUp), spawn "xbacklight +10")
+         , ((0, xF86XK_MonBrightnessDown), spawn "xbacklight -10")
          ]
 
 myWorkspaces :: [String]
