@@ -6,7 +6,6 @@ import XMonad.Layout.Gaps
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Mosaic
-import XMonad.Layout.Tabbed
 import XMonad.Layout.DwmStyle
 import XMonad.Layout.Tabbed
 import XMonad.Hooks.DynamicLog
@@ -15,11 +14,14 @@ import System.IO (hPutStrLn)
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Actions.CycleWS
 
+
 xmobarTitleColor :: String
 xmobarTitleColor = "#FFB6B0"
+
+xmobarCurrentWorkspaceColor :: String
 xmobarCurrentWorkspaceColor = "#CEFFAC"
 
-defaults = defaultConfig {
+defaults = def {
           terminal                 = "konsole"
         , workspaces               = myWorkspaces
         , modMask                  = mod4Mask
@@ -31,45 +33,48 @@ defaults = defaultConfig {
         , focusedBorderColor       = "orange"
         } `additionalKeys` myKeys  -- добавили к дефолтной конфигурации новые кнпоки!
 
+altMask :: KeyMask
 altMask = mod1Mask
 
+myKeys :: [((KeyMask, KeySym), X ())]
 myKeys = [ ((altMask .|. controlMask, xK_l), spawn "slock")
          , ((altMask .|. controlMask, xK_Left  ), prevWS)
          , ((altMask .|. controlMask, xK_Right ), nextWS)
          ]
 
 myWorkspaces :: [String]
-myWorkspaces =  ["1:web","2:dev","3:term","4:vm","5:media"] ++ map show [6..9]
+myWorkspaces =  ["1:web","2:dev","3:term","4:vm","5:media"] ++ map show ([6..9] :: [Int])
 
+myTabConfig :: Theme
 myTabConfig = def { inactiveBorderColor = "#FF0000"
                   , activeTextColor = "#00FF00"}
 
 myLayoutHook = spacing 6 $ gaps [(U, 20)] $ toggleLayouts (noBorders Full) $
     smartBorders $ Mirror tiled ||| mosaic 2 [3, 2]  ||| tabbed shrinkText myTabConfig
-      where 
+      where
         tiled = Tall nmaster delta ratio
         nmaster = 1
         delta   = 3/100
         ratio   = 3/5
 
 
+main :: IO ()
 main = do
-	xmproc <- spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobar.hs"
-	xmonad $ defaults {
-	logHook =  dynamicLogWithPP $ defaultPP {
-            ppOutput = System.IO.hPutStrLn xmproc
-          , ppTitle = xmobarColor xmobarTitleColor "" . shorten 100
-          , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor "" . wrap "[" "]"
-          , ppSep = "   "
-          , ppWsSep = " "
-          , ppLayout  = (\ x -> case x of
-              "Spacing 6 Mosaic"                      -> "[:]"
-              "Spacing 6 Mirror Tall"                 -> "[M]"
-              "Spacing 6 Hinted Tabbed Simplest"      -> "[T]"
-              "Spacing 6 Full"                        -> "[ ]"
-              _                                       -> x )
-          , ppHiddenNoWindows = showNamedWorkspaces
-      } 
+    xmproc <- spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobar.hs"
+    xmonad $ defaults {
+    logHook =  dynamicLogWithPP $ def { ppOutput = System.IO.hPutStrLn xmproc
+                                            , ppTitle = xmobarColor xmobarTitleColor "" . shorten 100
+                                            , ppCurrent = xmobarColor xmobarCurrentWorkspaceColor "" . wrap "[" "]"
+                                            , ppSep = "   "
+                                            , ppWsSep = " "
+                                            , ppLayout  = \ x -> case x of
+                                                "Spacing 6 Mosaic"                      -> "[:]"
+                                                "Spacing 6 Mirror Tall"                 -> "[M]"
+                                                "Spacing 6 Hinted Tabbed Simplest"      -> "[T]"
+                                                "Spacing 6 Full"                        -> "[ ]"
+                                                _                                       -> x
+                                            , ppHiddenNoWindows = showNamedWorkspaces
+                                            }
 } where showNamedWorkspaces wsId = if any (`elem` wsId) ['a'..'z']
                                        then pad wsId
                                        else ""
