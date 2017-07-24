@@ -23,14 +23,14 @@ xmobarCurrentWorkspaceColor :: String
 xmobarCurrentWorkspaceColor = "#CEFFAC"
 
 defaults = def {
-          terminal                 = "konsole"
+          terminal                 = "urxvt"
         , workspaces               = myWorkspaces
         , modMask                  = mod4Mask
         , layoutHook               = myLayoutHook
         , handleEventHook          = fullscreenEventHook  -- для корректного отображения окон в полно экранном режиме
         , startupHook              = setWMName "LG3D"  -- для совместимости определёных приложений, java например(IntelliJ IDEA)
-        , borderWidth              = 2
-        , normalBorderColor        = "black"
+        , borderWidth              = 1
+        , normalBorderColor        = "grey"
         , focusedBorderColor       = "orange"
         } `additionalKeys` myKeys  -- добавили к дефолтной конфигурации новые кнпоки!
 
