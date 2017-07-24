@@ -1,12 +1,15 @@
 Config { 
-    font = "xft:Dejavu Sans Mono:size=11:regular:antialias=true"
+    font = "xft:Dejavu Sans Mono:size=10:regular:antialias=true"
+    -- bgColor = "#362b12",
+    fgColor = "#fff897",
     bgColor = "#000000",
-    fgColor = "#ffffff",
-    position = Static { xpos = 0, ypos = 0, width = 1920, height = 20 },
+    -- fgColor = "#ffffff",
+    position = Static { xpos = 0, ypos = 0, width = 1920, height = 25 },
     lowerOnStart = True,
     commands = [
-         Run Weather "UUDD" ["-t","<tempC>°C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
-        ,Run Memory ["-t","<used>/<total>M (<cache>M)","-H","8192","-L","4096","-h","#FFB6B0","-l","#CEFFAC","-n","#FFFFCC"] 10        
+         Run Weather "UUDD" ["-t","<tempC>°C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000 --moscow
+         -- Run Weather "UWKD" ["-t","<station>: <tempC>°C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000 -- kazan
+        ,Run Memory ["-t","<used>/<total>M (<cache>M)","-H","8192","-L","4096","-h","#FFB6B0","-l","#CEFFAC","-n","#FFFFCC"] 10
         ,Run Network "wlp2s0" [
              "-t"    ,"rx:<rx>, tx:<tx>"
             ,"-H"   ,"200"
