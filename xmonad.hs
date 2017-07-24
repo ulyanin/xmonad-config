@@ -38,7 +38,7 @@ altMask :: KeyMask
 altMask = mod1Mask
 
 myKeys :: [((KeyMask, KeySym), X ())]
-myKeys = [ ((altMask .|. controlMask, xK_l), spawn "slock")
+myKeys = [ ((altMask .|. controlMask, xK_l), spawn "xscreensaver-command --lock")
          , ((altMask .|. controlMask, xK_Left  ), prevWS)
          , ((altMask .|. controlMask, xK_Right ), nextWS)
          , ((0, xF86XK_KbdBrightnessUp), spawn "asus-kbd-backlight up")
